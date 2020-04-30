@@ -1,4 +1,4 @@
-# ci-restserver
-Check the recent version at https://github.com/chriskacerguis/codeigniter-restserver
+# README #
 
-My alternate version https://github.com/ardisaurus/old-rest-ci
+This source is for Jurusan TIK
+
