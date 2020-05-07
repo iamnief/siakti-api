@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 Class JenisKelasModel extends CI_Model{
 
-	public function getjns_kls($namajnskls = NULL){
+	public function getJenisKelas($namajnskls = NULL){
 		if($namajnskls === NULL){
 			$all = $this->db->get('tik.jns_kls')->result_array();
 			return $all;
