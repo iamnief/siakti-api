@@ -29,7 +29,7 @@ class Jurusan extends REST_Controller{
         } else {
             $this->response([
                 'status' => false,
-                'message' => 'ID Not Found'
+                'message' => 'Kodejur Not Found'
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -82,7 +82,7 @@ class Jurusan extends REST_Controller{
         if($kodejur === NULL){
             $this->response([
                 'status' => false,
-                'message' => 'Provide an ID'
+                'message' => 'Provide an Kodejur'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->jurusan->delete($kodejur) > 0){
@@ -94,7 +94,7 @@ class Jurusan extends REST_Controller{
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'Kodejur Nout Found'
+                    'message' => 'Kodejur Not Found'
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }
