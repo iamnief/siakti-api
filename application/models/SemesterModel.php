@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-Class TahunAkadModel extends CI_Model{
+Class SemesterModel extends CI_Model{
 
 	public function getSemester($id = NULL){
 		$all = $this->db->get('tik.semester')->result_array();
