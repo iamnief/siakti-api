@@ -83,10 +83,10 @@ class Semester extends REST_Controller{
                 'message' => 'Provide an ID'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
-            if($this->tahunakad->delete($id) > 0){
+            if($this->semester->delete($id) > 0){
                 $this->response([
                     'status' => true,
-                    'thn_akad_id' => $id,
+                    'semester_nm' => $id,
                     'message' => 'Deleted'
                 ], REST_Controller::HTTP_NO_CONTENT);
             } else {
