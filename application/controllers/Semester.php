@@ -13,14 +13,25 @@ class Semester extends REST_Controller{
 	}
 
 	function index_get() {
-        $res = $this->semester->getSemester();    
+        $id = $this->get('semester_nm');
+
+        if ($id === NULL) {
+            $res = $this->semester->getSemester();    
+        } else{
+            $res = $this->semester->getSemester($id);
+        }
 
         if($res){
             $this->response([
                 'status' => true,
                 'data' => $res
             ], REST_Controller::HTTP_OK);
-        }
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'ID Not Found'
+            ], REST_Controller::HTTP_NOT_FOUND);
+        } 
     }
 
     function index_post() {
