@@ -26,8 +26,8 @@ Class TahunAkadModel extends CI_Model{
 		return $this->db->affected_rows();
 	}
 
-	public function delete($kode_jam){
-		$this->db->where('thn_akad_id', $kode_jam);
+	public function delete($id){
+		$this->db->where('thn_akad_id', $id);
 		$delete = $this->db->delete('tik.thn_akad');
 		return $this->db->affected_rows();
 	}
