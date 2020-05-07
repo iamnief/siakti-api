@@ -98,7 +98,7 @@ class Kelas extends REST_Controller{
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'ID Nout Found'
+                    'message' => 'ID Not Found'
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }
