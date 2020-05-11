@@ -13,8 +13,6 @@ class LihatJadwal extends REST_Controller{
 
 	function LihatJadwalDosen_get(){
         // select * from tik.jadwal_kul where nip = '4617010043')
-
-
         $id = $this->session->userdata($data_session['usr_name']);
         $data = $this->db->get_where('tik.mhs_jdwal',$where)->result_array();
         return $data;
@@ -22,8 +20,7 @@ class LihatJadwal extends REST_Controller{
 
     function LihatJadwalMahasiswa_get(){
         // select * from tik.jadwal_kul where kodejdwl in (select jadwal_kul_kodejdwl from tik.mhs_jdwal where mahasiswa_nim = '4617010043')
-
-
+        // $id = $this->get('usr_name');
         $id = $this->session->userdata($data_session['usr_name']);
         #Create where clause
         $this->db->select('select jadwal_kul_kodejdwl');

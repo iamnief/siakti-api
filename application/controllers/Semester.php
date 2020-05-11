@@ -86,9 +86,9 @@ class Semester extends REST_Controller{
             if($this->semester->delete($id) > 0){
                 $this->response([
                     'status' => true,
-                    'semester_nm' => $id,
+                    'id' => $id,
                     'message' => 'Deleted'
-                ], REST_Controller::HTTP_NO_CONTENT);
+                ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
                     'status' => false,

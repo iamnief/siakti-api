@@ -96,7 +96,7 @@ class Kurikulum extends REST_Controller{
                     'status' => true,
                     'namakur' => $namakur,
                     'message' => 'Deleted'
-                ], REST_Controller::HTTP_NO_CONTENT);
+                ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
                     'status' => false,

@@ -23,13 +23,15 @@ class JenisKelas extends REST_Controller{
 
         if($res){
             $this->response([
-                'status' => true,
-                'data' => $res
+                'responseCode' = '200',
+                'responseDesc' => 'Success Get Jenis Kelas',
+                'responseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'namajnskls Not Found'
+                'responseCode' => '404',
+                'responseDesc' => 'Nama Jenis Kelas Not Found',
+                'responseData' => $namajnskls
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -41,9 +43,9 @@ class JenisKelas extends REST_Controller{
 
         if($this->jeniskelas->insert($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'NewJenis Kelas Has Been Created',
-                'data' => $data
+                'responseCode' => true,
+                'responseDesc' => 'NewJenis Kelas Has Been Created',
+                'responseData' => $data
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([

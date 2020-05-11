@@ -92,7 +92,7 @@ class TahunAkad extends REST_Controller{
                     'status' => true,
                     'thn_akad_id' => $id,
                     'message' => 'Deleted'
-                ], REST_Controller::HTTP_NO_CONTENT);
+                ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
                     'status' => false,

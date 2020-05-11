@@ -94,7 +94,7 @@ class Kelas extends REST_Controller{
                     'status' => true,
                     'kodeklas' => $kode_kls,
                     'message' => 'Deleted'
-                ], REST_Controller::HTTP_NO_CONTENT);
+                ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
                     'status' => false,
