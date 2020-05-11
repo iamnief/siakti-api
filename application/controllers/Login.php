@@ -17,7 +17,7 @@ class Login extends REST_Controller{
         $where = array(
             'usr_name' => $username,
             'password' => $password
-        )
+        );
 
         $cek_m = $this->db->get_where('tik.mahasiswa',$where)->num_rows();
         $cek_d = $this->db->get_where('tik.staff',$where)->num_rows();
