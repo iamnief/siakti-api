@@ -23,13 +23,14 @@ class Prodi extends REST_Controller{
 
         if($res){
             $this->response([
-                'status' => true,
-                'data' => $res
+                'responseCode' => '200',
+                'responseDesc' => 'Success Get Prodi',
+                'responseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'ID Not Found'
+                'responseCode' => '404',
+                'responseDesc' => 'ID Not Found'
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -44,14 +45,14 @@ class Prodi extends REST_Controller{
 
         if($this->prodi->insert($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'New Prodi Has Been Created',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'New Prodi Has Been Created',
+                'responseData' => $data
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Create New Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -68,14 +69,14 @@ class Prodi extends REST_Controller{
 
         if($this->prodi->update($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'Prodi Has Been Updated',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'Prodi Has Been Updated',
+                'responseData' => $data
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Update Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -85,20 +86,21 @@ class Prodi extends REST_Controller{
 
         if($id === NULL){
             $this->response([
-                'status' => false,
-                'message' => 'Provide an ID'
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an ID'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->prodi->delete($id) > 0){
                 $this->response([
-                    'status' => true,
-                    'id' => $id,
-                    'message' => 'Deleted'
+                    'responseCode' => '00',
+                    'responseDesc' => 'Deleted',
+                    'responseData' => $id
                 ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => false,
-                    'message' => 'ID Nout Found'
+                    'responseCode' => '01',
+                    'responseDesc' => 'ID Nout Found',
+                    'responseData' => $id
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }

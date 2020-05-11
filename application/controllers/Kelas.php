@@ -23,13 +23,14 @@ class Kelas extends REST_Controller{
 
         if($res){
             $this->response([
-                'status' => true,
-                'data' => $res
+                'responseCode' => '200',
+                'responseDesc' => 'Success Get Kelas',
+                'responseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'ID Not Found'
+                'responseCode' => '404',
+                'responseDesc' => 'ID Not Found'
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -44,14 +45,14 @@ class Kelas extends REST_Controller{
 
         if($this->kelas->insert($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'New Kelas Has Been Created',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'New Kelas Has Been Created',
+                'responseData' => $data
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Create New Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -68,14 +69,14 @@ class Kelas extends REST_Controller{
 
         if($this->kelas->update($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'Kelas Has Been Updated',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'Kelas Has Been Updated',
+                'responseData' => $data
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Update Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -85,20 +86,21 @@ class Kelas extends REST_Controller{
 
         if($kode_klas === NULL){
             $this->response([
-                'status' => false,
-                'message' => 'Provide an ID'
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an ID'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->kelas->delete($kode_kls) > 0){
                 $this->response([
-                    'status' => true,
-                    'kodeklas' => $kode_kls,
-                    'message' => 'Deleted'
+                    'responseCode' => '00',
+                    'responseDesc' => 'Deleted',
+                    'responseData' => $kode_kls
                 ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => false,
-                    'message' => 'ID Not Found'
+                    'responseCode' => '01',
+                    'responseDesc' => 'ID Not Found',
+                    'responseData' => $kode_kls
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }

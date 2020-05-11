@@ -23,7 +23,7 @@ class JenisKelas extends REST_Controller{
 
         if($res){
             $this->response([
-                'responseCode' = '200',
+                'responseCode' => '200',
                 'responseDesc' => 'Success Get Jenis Kelas',
                 'responseData' => $res
             ], REST_Controller::HTTP_OK);
@@ -31,7 +31,6 @@ class JenisKelas extends REST_Controller{
             $this->response([
                 'responseCode' => '404',
                 'responseDesc' => 'Nama Jenis Kelas Not Found',
-                'responseData' => $namajnskls
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -43,14 +42,14 @@ class JenisKelas extends REST_Controller{
 
         if($this->jeniskelas->insert($data) > 0){
             $this->response([
-                'responseCode' => true,
-                'responseDesc' => 'NewJenis Kelas Has Been Created',
-                'responseData' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'New Jenis Kelas Data Has Been Created'
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Create New Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!',
+                'responseData' => $data
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -64,14 +63,14 @@ class JenisKelas extends REST_Controller{
 
         if($this->jeniskelas->update($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'Jenis Kelas Has Been Updated',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'Jenis Kelas Data Has Been Updated',
+                'responseData' => $data
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Update Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -81,20 +80,21 @@ class JenisKelas extends REST_Controller{
 
         if($namajnskls === NULL){
             $this->response([
-                'status' => false,
-                'message' => 'Provide an namajnskls'
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an Nama Jenis Kelas'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->jeniskelas->delete($namajnskls) > 0){
                 $this->response([
-                    'status' => true,
-                    'nama_jnskls' => $namajnskls,
-                    'message' => 'Deleted'
-                ], REST_Controller::HTTP_NO_CONTENT);
+                    'responseCode' => '00',
+                    'respoNseDesc' => 'Deleted',
+                    'responseData' => $namajnskls        
+                ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => false,
-                    'message' => 'namajnskls Not Found'
+                    'responseCode' => '01',
+                    'responseDesc' => 'Nama Jenis Kelas Not Found',
+                    'responseData' => $namajnskls
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }

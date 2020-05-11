@@ -23,13 +23,14 @@ class MataKuliah extends REST_Controller{
 
         if($res){
             $this->response([
-                'status' => true,
-                'data' => $res
+                'responseCode' => '200',
+                'responseDesc' => 'Succes Get MataKuliah',
+                'responseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'kodemk Not Found'
+                'responseCode' => '404',
+                'responseDesc' => 'kodemk Not Found'
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -49,14 +50,14 @@ class MataKuliah extends REST_Controller{
 
         if($this->matakuliah->insert($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'New Mata Kuliah Has Been Created',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'New Mata Kuliah Has Been Created',
+                'responseData' => $data
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Create New Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -78,14 +79,14 @@ class MataKuliah extends REST_Controller{
 
         if($this->matakuliah->update($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'Mata Kuliah Has Been Updated',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'Mata Kuliah Has Been Updated',
+                'responseData' => $data
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Update Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -95,20 +96,21 @@ class MataKuliah extends REST_Controller{
 
         if($kodemk === NULL){
             $this->response([
-                'status' => false,
-                'message' => 'Provide an kodemk'
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an kodemk'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->matakuliah->delete($kodemk) > 0){
                 $this->response([
-                    'status' => true,
-                    'kodemk' => $kodemk,
-                    'message' => 'Deleted'
+                    'responseCode' => '00',
+                    'responseDesc' => 'Deleted',
+                    'responseData' => $kodemk,    
                 ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => false,
-                    'message' => 'kodemk Not Found'
+                    'responseCode' => '01',
+                    'responseDesc' => 'kodemk Not Found',
+                    'responseData' => $kodemk
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }

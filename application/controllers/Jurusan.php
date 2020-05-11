@@ -23,13 +23,14 @@ class Jurusan extends REST_Controller{
 
         if($res){
             $this->response([
-                'status' => true,
-                'data' => $res
+                'responseCode' => '200',
+                'responseDesc' => 'Success Get Kodejur',
+                'responseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Kodejur Not Found'
+                'responseCode' => '404',
+                'responseDesc' => 'Kodejur Not Found'
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -42,14 +43,14 @@ class Jurusan extends REST_Controller{
 
         if($this->jurusan->insert($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'New Jurusan Has Been Created',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'New Jurusan Has Been Created',
+                'responseData' => $data
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Create New Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -64,14 +65,14 @@ class Jurusan extends REST_Controller{
 
         if($this->jurusan->update($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'Jurusan Has Been Updated',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'Jurusan Has Been Updated',
+                'responseData' => $data
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Update Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -81,20 +82,21 @@ class Jurusan extends REST_Controller{
 
         if($kodejur === NULL){
             $this->response([
-                'status' => false,
-                'message' => 'Provide an Kodejur'
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an Kodejur'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->jurusan->delete($kodejur) > 0){
                 $this->response([
-                    'status' => true,
-                    'kodejur' => $kodejur,
-                    'message' => 'Deleted'
-                ], REST_Controller::HTTP_NO_CONTENT);
+                    'responseCode' => '00',
+                    'responseDesc' => 'Deleted',
+                    'responseData' => $kodejur
+                ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => false,
-                    'message' => 'Kodejur Not Found'
+                    'responseCode' => '01',
+                    'responseDesc' => 'Kodejur Not Found',
+                    'responseData' => $kodejur
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }

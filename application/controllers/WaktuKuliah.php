@@ -23,13 +23,14 @@ class WaktuKuliah extends REST_Controller{
 
         if($res){
             $this->response([
-                'status' => true,
-                'data' => $res
+                'responseCode' => '200',
+                'responseDesc' => 'Succes Get Waktu Kuliah',
+                'responseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'ID Not Found'
+                'responseCode' => '404',
+                'responseDesc' => 'ID Not Found'
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -43,14 +44,14 @@ class WaktuKuliah extends REST_Controller{
 
         if($this->waktukuliah->insert($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'New Waktu Kuliah Has Been Created',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'New Waktu Kuliah Has Been Created',
+                'responseData' => $data
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Create New Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -66,14 +67,14 @@ class WaktuKuliah extends REST_Controller{
 
         if($this->waktukuliah->update($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'Waktu Kuliah Has Been Updated',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'Waktu Kuliah Has Been Updated',
+                'responseData' => $data
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Update Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -83,20 +84,21 @@ class WaktuKuliah extends REST_Controller{
 
         if($kode_jam === NULL){
             $this->response([
-                'status' => false,
-                'message' => 'Provide an ID'
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an ID'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->waktukuliah->delete($kode_jam) > 0){
                 $this->response([
-                    'status' => true,
-                    'kode_jam' => $kode_jam,
-                    'message' => 'Deleted'
+                    'responseCode' => '00',
+                    'responseDesc' => 'Deleted',
+                    'responseData' => $kode_jam
                 ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => false,
-                    'message' => 'ID Not Found'
+                    'responseCode' => '01',
+                    'responseDesc' => 'ID Not Found',
+                    'responseData' => $kode_jam
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }

@@ -23,13 +23,14 @@ class Staff extends REST_Controller{
 
         if($res){
             $this->response([
-                'status' => true,
-                'data' => $res
+                'responseCode' => '200',
+                'responseDesc' => 'Success Get Staff',
+                'responseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'NIP Not Found'
+                'responseCode' => '404',
+                'responseDesc' => 'NIP Not Found'
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -50,14 +51,14 @@ class Staff extends REST_Controller{
 
         if($this->staff->insert($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'New Staff Has Been Created',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'New Staff Has Been Created',
+                'responseData' => $data
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Create New Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -80,14 +81,14 @@ class Staff extends REST_Controller{
 
         if($this->staff->update($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'Staff Has Been Updated',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'Staff Has Been Updated',
+                'responseData' => $data
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Update Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -97,20 +98,21 @@ class Staff extends REST_Controller{
 
         if($nip === NULL){
             $this->response([
-                'status' => false,
-                'message' => 'Provide an NIP'
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an NIP'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->staff->delete($nip) > 0){
                 $this->response([
-                    'status' => true,
-                    'nip' => $nip,
-                    'message' => 'Deleted'
+                    'responseCode' => '00',
+                    'responseDesc' => 'Deleted',
+                    'responseData' => $nip
                 ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => false,
-                    'message' => 'NIP Not Found'
+                    'responseCode' => '01',
+                    'responseDesc' => 'NIP Not Found',
+                    'responseData' => $nip
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }

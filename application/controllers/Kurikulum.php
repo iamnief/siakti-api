@@ -23,13 +23,14 @@ class Kurikulum extends REST_Controller{
 
         if($res){
             $this->response([
-                'status' => true,
-                'data' => $res
+                'responseCode' => '200',
+                'responseDesc' => 'Success Get Kurikulum',
+                'ResponseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'namakur Not Found'
+                'responseCode' => '404',
+                'responseDesc' => 'namakur Not Found'
             ], REST_Controller::HTTP_NOT_FOUND);
         } 
     }
@@ -45,14 +46,14 @@ class Kurikulum extends REST_Controller{
 
         if($this->kurikulum->insert($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'New Kurikulum Has Been Created',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'New Kurikulum Has Been Created',
+                'ResponseData' => $data
             ], REST_Controller::HTTP_CREATED);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Create New Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -70,14 +71,14 @@ class Kurikulum extends REST_Controller{
 
         if($this->kurikulum->update($data) > 0){
             $this->response([
-                'status' => true,
-                'message' => 'Kurikulum Has Been Updated',
-                'data' => $data
+                'responseCode' => '00',
+                'responseDesc' => 'Kurikulum Has Been Updated',
+                'ResponseData' => $data
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
-                'status' => false,
-                'message' => 'Failed to Update Data!'
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
@@ -87,20 +88,21 @@ class Kurikulum extends REST_Controller{
 
         if($namakur === NULL){
             $this->response([
-                'status' => false,
-                'message' => 'Provide an namakur'
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an namakur'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->kurikulum->delete($namakur) > 0){
                 $this->response([
-                    'status' => true,
-                    'namakur' => $namakur,
-                    'message' => 'Deleted'
+                    'responseCode' => '00',
+                    'responseDesc' => 'Deleted',
+                    'ResponseData' => $namakur                    
                 ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
-                    'status' => false,
-                    'message' => 'namakur Not Found'
+                    'responseCode' => '01',
+                    'responseDesc' => 'namakur Not Found',
+                    'responseData' => $namakur
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }
