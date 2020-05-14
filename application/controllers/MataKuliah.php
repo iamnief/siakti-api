@@ -38,7 +38,7 @@ class MataKuliah extends REST_Controller{
     function index_post() {
         $data = array(
             'kodemk' => $this->post('kodemk'),
-            'mamamk' => $this->post('namamk'),
+            'namamk' => $this->post('namamk'),
             'sks_prak' => $this->post('sks_prak'),
             'jam_prak' => $this->post('jam_prak'),
             'sks_teori' => $this->post('sks_teori'),
@@ -67,7 +67,7 @@ class MataKuliah extends REST_Controller{
 
         $data = array(
             'kodemk' => $kodemk,
-            'mamamk' => $this->put('namamk'),
+            'namamk' => $this->put('namamk'),
             'sks_prak' => $this->put('sks_prak'),
             'jam_prak' => $this->put('jam_prak'),
             'sks_teori' => $this->put('sks_teori'),

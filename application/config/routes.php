@@ -54,3 +54,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['lihatjadwal/mahasiswa/(:any)']['GET'] = 'ruangan/LihatJadwalMahasiswa/$1';
+$route['lihatjadwal/dosen/(:any)']['GET'] = 'ruangan/LihatJadwalDosen/$1';

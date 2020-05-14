@@ -25,7 +25,7 @@ class TahunAkad extends REST_Controller{
             $this->response([
                 'responseCode' => '200',
                 'responseDesc' => 'Succes Get Tahun Akad',
-                'responseData' => $id
+                'responseData' => $res
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([

@@ -16,7 +16,7 @@ Class TahunAkadModel extends CI_Model{
 	}
 
 	public function insert($data){
-		$insert = $this->db->insert('tik.tahun_akad', $data);
+		$insert = $this->db->insert('tik.thn_akad', $data);
 		return $this->db->affected_rows();
 	}
 

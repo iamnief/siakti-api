@@ -60,7 +60,7 @@ class Jurusan extends REST_Controller{
 
         $data = array(
             'kodejur' => $kodejur,
-            'namajur' => $this->post('namajur'),
+            'namajur' => $this->put('namajur'),
         );
 
         if($this->jurusan->update($data) > 0){

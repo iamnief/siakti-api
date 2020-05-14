@@ -62,7 +62,7 @@ class Kurikulum extends REST_Controller{
         $namakur = $this->put('namakur');
 
         $data = array(
-            'namakur' => $this->put('namakur'),
+            'namakur' => $namakur,
             'tgl_berlaku' => $this->put('tgl_berlaku'),
             'learn_out_prodi' => $this->put('learn_out_prodi'),
             'prodi_prodi_id' => $this->put('prodi_prodi_id'),
