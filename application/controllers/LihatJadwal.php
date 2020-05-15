@@ -16,7 +16,12 @@ class LihatJadwal extends REST_Controller{
         $id = $this->get('usr_name');
         // $id = $this->session->userdata($data_session['usr_name']);
         $data = $this->db->get_where('tik.mhs_jdwal',$where)->result_array();
-        return $data;
+        $res = $data;
+        $this->response([
+                'responseCode' => '200',
+                'responseDesc' => 'Sukses Lihat Jadwal Dosen',
+                'responseData' => $res
+            ], REST_Controller::HTTP_OK);
     }
 
     function LihatJadwalMahasiswa_get(){
@@ -33,7 +38,12 @@ class LihatJadwal extends REST_Controller{
         $this->db->select('*');
         $this->db->from('tik.mhs_jdwal');
         $data = $this->db->get_where("`kodejdwl` IN ($where_clause)")->result_array();
-        return $data;
+        $res  = $data;
+        $this->response([
+                'responseCode' => '200',
+                'responseDesc' => 'Sukses Lihat Jadwal Mahasiswa',
+                'responseData' => $res
+            ], REST_Controller::HTTP_OK);
 
 
     }

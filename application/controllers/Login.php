@@ -11,7 +11,7 @@ class Login extends REST_Controller{
 		parent::__construct($config);
 	}
 
-	function login_post(){
+	function login_get(){
         $username = $this->post('username');
         $password = $this->post('password');
         $where = array(
@@ -23,21 +23,36 @@ class Login extends REST_Controller{
         $cek_d = $this->db->get_where('tik.staff',$where)->num_rows();
 
         if($cek_m > 0){
+            $res = $this->db->get_where('tik.mahasiswa',$where)->result_array();
             $data_session = array(
                 'usr_name' => $username,
                 'password' => $password
             );
+            $this->response([
+                'responseCode' => '200',
+                'responseDesc' => 'Sukses Login Mahasiswa',
+                'responseData' => $res
+            ], REST_Controller::HTTP_OK);
             $this->session->set_userdata($data_session);
         }
         elseif ($cek_d > 0) {
+            $this->db->get_where('tik.staff',$where)->result_array();
             $data_session = array(
                 'usr_name' => $username,
                 'password' => $password
             );
+            $this->response([
+                'responseCode' => '200',
+                'responseDesc' => 'Success Login Dosen',
+                'responseData' => $res
+            ], REST_Controller::HTTP_OK);
             $this->session->set_userdata($data_session);
         }
         else{
-            echo "gagal login";
+            $this->response([
+                'responseCode' => '404',
+                'responseDesc' => 'Account Not Found',
+            ], REST_Controller::HTTP_NOT_FOUND);
         }
     }
 }
