@@ -9,23 +9,31 @@ class Ruangan extends REST_Controller{
 
 	function __construct($config = 'rest'){
 		parent::__construct($config);
-		$this->load->model('RuanganModel');
+		$this->load->model('RuanganModel', 'ruangan');
 	}
 
-
 	function index_get() {
-        $this->load->helper('url');
-        $namaruang = $this->uri->segment(2);
-        if ($namaruang=='') {
-            $res = $this->RuanganModel->getAll();
-            
+        $id = $this->get('namaruang');
+
+        if ($id === NULL) {
+            $res = $this->ruangan->getRuangan();    
         } else{
-            $res = $this->RuanganModel->getOne($namaruang);
+            $res = $this->ruangan->getRuangan($id);
         }
 
-        $this->response($res);
+        if($res){
+            $this->response([
+                'responseCode' => '200',
+                'responseDesc' => 'Success Get Ruangan',
+                'responseData' => $res
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'responseCode' => '404',
+                'responseDesc' => 'ID Not Found'
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
     }
-
 
     function index_post() {
         $data = array(
@@ -35,31 +43,66 @@ class Ruangan extends REST_Controller{
             'status' => $this->post('status')
         );
 
-        $res = $this->RuanganModel->insertNew($data);
-        $this->response($res);
+        if($this->ruangan->insert($data) > 0){
+            $this->response([
+                'responseCode' => '00',
+                'responseDesc' => 'New Ruangan Has Been Created',
+                'responseData' => $data
+            ], REST_Controller::HTTP_CREATED);
+        } else {
+            $this->response([
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Create New Data!'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
     }
 
     function index_put(){
-        $this->load->helper('url');
-        $namaruang = $this->uri->segment(2);
+        $id = $this->put('namaruang');
 
         $data = array(
-            'namaruang' => $namaruang,
+            'namaruang' => $id,
             'kapasitas' => $this->put('kapasitas'),
             'lokasi_gedung' => $this->put('lokasi_gedung'),
             'status' => $this->put('status')
         );
 
-        $res = $this->RuanganModel->update($data);
-        $this->response($res);
+        if($this->ruangan->update($data) > 0){
+            $this->response([
+                'responseCode' => '00',
+                'responseDesc' => 'Ruangan Has Been Updated',
+                'responseData' => $data
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'responseCode' => '01',
+                'responseDesc' => 'Failed to Update Data!'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
     }
 
     function index_delete(){
-        $this->load->helper('url');
-        $namaruang = $this->uri->segment(2);
+        $id = $this->delete('namaruang');
 
-        $res = $this->RuanganModel->delete($namaruang);
-        $this->response($res);
+        if($id === NULL){
+            $this->response([
+                'responseCode' => '400',
+                'responseDesc' => 'Provide an ID'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        } else {
+            if($this->prodi->delete($id) > 0){
+                $this->response([
+                    'responseCode' => '00',
+                    'responseDesc' => 'Deleted',
+                    'responseData' => $id
+                ], REST_Controller::HTTP_OK);
+            } else {
+                $this->response([
+                    'responseCode' => '01',
+                    'responseDesc' => 'ID Nout Found',
+                    'responseData' => $id
+                ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }
     }
 }
-?>

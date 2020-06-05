@@ -15,7 +15,7 @@ class LihatJadwal extends REST_Controller{
         // select * from tik.jadwal_kul where nip = '4617010043')
         $id = $this->get('usr_name');
         // $id = $this->session->userdata($data_session['usr_name']);
-        $data = $this->db->get_where('tik.mhs_jdwal',$where)->result_array();
+        $data = $this->db->get_where('tik.mhs_jdwal',$id)->result_array();
         $res = $data;
         $this->response([
                 'responseCode' => '200',

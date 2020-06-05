@@ -41,6 +41,7 @@ class TahunAkad extends REST_Controller{
             'thn_akad_id' => $this->post('thn_akad_id'),
             'tahun_akad' => $this->post('tahun_akad'),
             'semester_semester_nm' => $this->post('semester_semester_nm'),
+            'status' => $this->post('status'),
         );
 
         if($this->tahunakad->insert($data) > 0){
@@ -64,6 +65,7 @@ class TahunAkad extends REST_Controller{
             'thn_akad_id' => $id,
             'tahun_akad' => $this->put('tahun_akad'),
             'semester_semester_nm' => $this->put('semester_semester_nm'),
+            'status' => $this->put('status'),
         );
 
         if($this->tahunakad->update($data) > 0){

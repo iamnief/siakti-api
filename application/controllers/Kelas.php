@@ -84,7 +84,7 @@ class Kelas extends REST_Controller{
     function index_delete(){
         $kode_kls = $this->delete('kodeklas');
 
-        if($kode_klas === NULL){
+        if($kode_kls === NULL){
             $this->response([
                 'responseCode' => '400',
                 'responseDesc' => 'Provide an ID'
