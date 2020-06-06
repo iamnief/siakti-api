@@ -11,7 +11,7 @@ class Login extends REST_Controller{
 		parent::__construct($config);
 	}
 
-	function login_get(){
+	function index_post(){
         $username = $this->post('username');
         $password = $this->post('password');
         $where = array(
@@ -36,7 +36,7 @@ class Login extends REST_Controller{
             $this->session->set_userdata($data_session);
         }
         elseif ($cek_d > 0) {
-            $this->db->get_where('tik.staff',$where)->result_array();
+            $res = $this->db->get_where('tik.staff',$where)->result_array();
             $data_session = array(
                 'usr_name' => $username,
                 'password' => $password
