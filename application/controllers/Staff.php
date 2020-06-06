@@ -47,6 +47,7 @@ class Staff extends REST_Controller{
             'email_staff' => $this->post('email_staff'),
             'usr_name' => $this->post('usr_name'),
             'password' => $this->post('password'),
+            'pin' => $this->post('pin'),
             'prodi_prodi_id' => $this->post('prodi_prodi_id'),
         );
 
@@ -78,6 +79,7 @@ class Staff extends REST_Controller{
             'email_staff' => $this->put('email_staff'),
             'usr_name' => $this->put('usr_name'),
             'password' => $this->put('password'),
+            'pin' => $this->put('pin'),
             'prodi_prodi_id' => $this->put('prodi_prodi_id'),
         );
 
