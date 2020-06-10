@@ -20,19 +20,7 @@ class Kelas extends REST_Controller{
         } else{
             $res = $this->kelas->getKelas($kode_kls);
         }
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get Kelas',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        } 
+        $this->response($res);
     }
 
     function index_post() {

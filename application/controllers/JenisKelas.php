@@ -20,19 +20,7 @@ class JenisKelas extends REST_Controller{
         } else{
             $res = $this->jeniskelas->getJenisKelas($namajnskls);
         }
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get Jenis Kelas',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'Nama Jenis Kelas Not Found',
-            ], REST_Controller::HTTP_NOT_FOUND);
-        } 
+        $this->response($res);
     }
 
     function index_post() {

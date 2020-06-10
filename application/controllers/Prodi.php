@@ -20,19 +20,7 @@ class Prodi extends REST_Controller{
         } else{
             $res = $this->prodi->getProdi($id);
         }
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get Prodi',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        } 
+        $this->response($res);
     }
 
     function index_post() {

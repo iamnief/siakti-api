@@ -21,19 +21,7 @@ class JadwalKuliah extends REST_Controller{
         } else{
             $res = $this->jadwalkuliah->getJadwalKuliah($kodejdwl);
         }
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get JadwalKuliah',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
+        $this->response($res);
     }
 
     function index_post() {
@@ -120,19 +108,7 @@ class JadwalKuliah extends REST_Controller{
         usort($res, function ($a, $b){
             return $a['jam_mulai'] < $b['jam_mulai'] ? -1 : 1;
         });
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get JadwalKuliah',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
+        $this->response($res);
     }
 
     function dosen_get($thn_akad, $nip, $hari, $tgl) {
@@ -142,19 +118,7 @@ class JadwalKuliah extends REST_Controller{
         usort($res, function ($a, $b){
             return $a['jam_mulai'] < $b['jam_mulai'] ? -1 : 1;
         });
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get JadwalKuliah',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
+        $this->response($res);
     }
 }
 ?>

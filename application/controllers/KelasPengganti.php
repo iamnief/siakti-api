@@ -24,19 +24,7 @@ class KelasPengganti extends REST_Controller
         } else {
             $res = $this->kls_pengganti->getKelasPengganti($kd_gantikls);
         }
-
-        if ($res) {
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get KelasPengganti',
-                'ResponseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'kd_gantikls Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
+        $this->response($res);
     }
 
     function index_post()

@@ -20,19 +20,7 @@ class MataKuliah extends REST_Controller{
         } else{
             $res = $this->matakuliah->getMataKuliah($kodemk);
         }
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Succes Get MataKuliah',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'kodemk Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        } 
+        $this->response($res);
     }
 
     function index_post() {

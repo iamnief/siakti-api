@@ -20,19 +20,7 @@ class WaktuKuliah extends REST_Controller{
         } else{
             $res = $this->waktukuliah->getWaktuKuliah($kode_jam);
         }
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Succes Get Waktu Kuliah',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        } 
+        $this->response($res);
     }
 
     function index_post() {

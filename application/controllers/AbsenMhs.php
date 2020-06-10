@@ -18,18 +18,7 @@ class AbsenMhs extends REST_Controller{
 
         $res = $this->absen_mhs->getAbsenMhs($absensi_kd_absendsn, $mhs_jdwal_kodemhs_jdwl);
 
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get absensi',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        } 
+        $this->response($res);
     }
 
     function index_post() {

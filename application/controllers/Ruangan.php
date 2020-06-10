@@ -20,19 +20,7 @@ class Ruangan extends REST_Controller{
         } else{
             $res = $this->ruangan->getRuangan($id);
         }
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Get Ruangan',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
+        $this->response($res);
     }
 
     function index_post() {

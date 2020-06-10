@@ -20,38 +20,12 @@ class TahunAkad extends REST_Controller{
         } else{
             $res = $this->tahunakad->getTahunAkad($id);
         }
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Succes Get Tahun Akad',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found',
-                'responseData' => $id
-            ], REST_Controller::HTTP_NOT_FOUND);
-        } 
+        $this->response($res);
     }
 
 	function aktif_get() {
         $res = $this->tahunakad->getTahunAkadAktif();
-
-        if($res){
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Succes Get Tahun Akad',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'ID Not Found',
-                'responseData' => ''
-            ], REST_Controller::HTTP_NOT_FOUND);
-        } 
+        $this->response($res);
     }
 
     function index_post() {
