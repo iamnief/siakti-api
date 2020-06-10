@@ -36,6 +36,24 @@ class TahunAkad extends REST_Controller{
         } 
     }
 
+	function aktif_get() {
+        $res = $this->tahunakad->getTahunAkadAktif();
+
+        if($res){
+            $this->response([
+                'responseCode' => '200',
+                'responseDesc' => 'Succes Get Tahun Akad',
+                'responseData' => $res
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'responseCode' => '404',
+                'responseDesc' => 'ID Not Found',
+                'responseData' => ''
+            ], REST_Controller::HTTP_NOT_FOUND);
+        } 
+    }
+
     function index_post() {
         $data = array(
             'thn_akad_id' => $this->post('thn_akad_id'),

@@ -15,6 +15,12 @@ Class TahunAkadModel extends CI_Model{
 		}
 	}
 
+	public function getTahunAkadAktif(){
+		$this->db->where('status', 'aktif');
+		$data = $this->db->get('tik.thn_akad')->result_array();
+		return $data;
+	}
+
 	public function insert($data){
 		$insert = $this->db->insert('tik.thn_akad', $data);
 		return $this->db->affected_rows();
