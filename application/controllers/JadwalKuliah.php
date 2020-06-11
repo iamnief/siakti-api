@@ -11,6 +11,7 @@ class JadwalKuliah extends REST_Controller{
 		parent::__construct($config);
 		$this->load->model('JadwalKuliahModel', 'jadwalkuliah');
 		$this->load->model('KelasPenggantiModel', 'kls_pengganti');
+		$this->load->model('TahunAkadModel', 'thn_akad');
 	}
 
 	function index_get() {
@@ -101,9 +102,11 @@ class JadwalKuliah extends REST_Controller{
         }
     }
 
-    function mahasiswa_get($thn_akad, $kelas, $hari, $tgl) {
-        $jk = $this->jadwalkuliah->getJadwalKuliahMahasiswa($thn_akad, $kelas, $hari);
-        $kp = $this->kls_pengganti->getKelasPenggantiMahasiswa($thn_akad, $kelas, $tgl);
+    function mahasiswa_get($kelas, $hari, $tgl) {
+        $thn_akad = $this->thn_akad->getTahunAkadAktif();
+        $thn_akad_id = $thn_akad[0]['thn_akad_id'];
+        $jk = $this->jadwalkuliah->getJadwalKuliahMahasiswa($thn_akad_id, $kelas, $hari);
+        $kp = $this->kls_pengganti->getKelasPenggantiMahasiswa($thn_akad_id, $kelas, $tgl);
         $res = array_merge($jk, $kp);
         usort($res, function ($a, $b){
             return $a['jam_mulai'] < $b['jam_mulai'] ? -1 : 1;
@@ -111,9 +114,11 @@ class JadwalKuliah extends REST_Controller{
         $this->response($res);
     }
 
-    function dosen_get($thn_akad, $nip, $hari, $tgl) {
-        $jk = $this->jadwalkuliah->getJadwalKuliahDosen($thn_akad, $nip, $hari);
-        $kp = $this->kls_pengganti->getKelasPenggantiDosen($thn_akad, $nip, $tgl);
+    function dosen_get($nip, $hari, $tgl) {
+        $thn_akad = $this->thn_akad->getTahunAkadAktif();
+        $thn_akad_id = $thn_akad[0]['thn_akad_id'];
+        $jk = $this->jadwalkuliah->getJadwalKuliahDosen($thn_akad_id, $nip, $hari);
+        $kp = $this->kls_pengganti->getKelasPenggantiDosen($thn_akad_id, $nip, $tgl);
         $res = array_merge($jk, $kp);
         usort($res, function ($a, $b){
             return $a['jam_mulai'] < $b['jam_mulai'] ? -1 : 1;

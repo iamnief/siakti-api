@@ -28,12 +28,7 @@ class Login extends REST_Controller{
                 'usr_name' => $username,
                 'password' => $password
             );
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Sukses Login Mahasiswa',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-            $this->session->set_userdata($data_session);
+            $this->response($res);
         }
         elseif ($cek_d > 0) {
             $res = $this->db->get_where('tik.staff',$where)->result_array();
@@ -41,18 +36,10 @@ class Login extends REST_Controller{
                 'usr_name' => $username,
                 'password' => $password
             );
-            $this->response([
-                'responseCode' => '200',
-                'responseDesc' => 'Success Login Dosen',
-                'responseData' => $res
-            ], REST_Controller::HTTP_OK);
-            $this->session->set_userdata($data_session);
+            $this->response($res);
         }
         else{
-            $this->response([
-                'responseCode' => '404',
-                'responseDesc' => 'Account Not Found',
-            ], REST_Controller::HTTP_NOT_FOUND);
+            $this->response();
         }
     }
 }

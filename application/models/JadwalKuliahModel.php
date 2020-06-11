@@ -32,7 +32,7 @@ Class JadwalKuliahModel extends CI_Model{
 	}
 
 	public function getJadwalKuliahDosen($thn_akad_id ,$nip, $hari){
-		$this->db->select('min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai, 
+		$this->db->select('min(jk.kodejdwl) as kodejdwl, min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai, 
 			jk.ruangan_namaruang, mk.namamk, 
 			kls.namaklas');
 		$this->db->from('tik.jadwal_kul as jk');
