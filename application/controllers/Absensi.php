@@ -25,7 +25,6 @@ class Absensi extends REST_Controller{
 
     function index_post() {
         $data = array(
-            'kd_absendsn' => $this->post('kd_absendsn'),
             'tgl' => $this->post('tgl'),
             'jam_msk' => $this->post('jam_msk'),
             'jam_keluar' => $this->post('jam_keluar'),

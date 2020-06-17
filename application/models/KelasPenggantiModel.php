@@ -33,14 +33,18 @@ Class KelasPenggantiModel extends CI_Model{
 	}
 
 	public function getKelasPenggantiDosen($thn_akad_id ,$nip, $tgl_pengganti){
-		$this->db->select('min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai, 
-			kp.ruangan_namaruang, mk.namamk, 
-			kls.namaklas');
+		$absensi = "(select * from tik.absensi where tgl = '".$tgl_pengganti."') as ab";
+
+		$this->db->select('min(kp.kd_gantikls) as kd_gantikls	, min(wk.jam_mulai) as jam_mulai, 
+			max(wk.jam_selesai) as jam_selesai, kp.ruangan_namaruang, mk.namamk, 
+			kls.namaklas, max(ab.kd_absendsn) as kd_absendsn, 
+			min(ab.jam_msk) as abs_jam_msk, max(ab.jam_keluar) as abs_jam_keluar');
         $this->db->from('tik.kls_pengganti as kp');
         $this->db->join('tik.wkt_kuliah as wk', 'kp.wkt_kuliah_kode_jam = wk.kode_jam');
         $this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
         $this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
 		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
+		$this->db->join($absensi, 'kp.kd_gantikls = ab.kls_pengganti_kd_gantikls', 'left');
 		$this->db->group_by('kp.ruangan_namaruang, mk.namamk, kls.namaklas');
 		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
 		$this->db->where('jk.staff_nip', $nip);

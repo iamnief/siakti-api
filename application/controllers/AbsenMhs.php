@@ -14,9 +14,9 @@ class AbsenMhs extends REST_Controller{
 
 	function index_get() {
         $absensi_kd_absendsn = $this->get('absensi_kd_absendsn');
-        $mhs_jdwal_kodemhs_jdwl = $this->get('mhs_jdwal_kodemhs_jdwl');
+        $mahasiswa_nim = $this->get('mahasiswa_nim');
 
-        $res = $this->absen_mhs->getAbsenMhs($absensi_kd_absendsn, $mhs_jdwal_kodemhs_jdwl);
+        $res = $this->absen_mhs->getAbsenMhs($absensi_kd_absendsn, $mahasiswa_nim);
 
         $this->response($res);
     }
@@ -24,6 +24,7 @@ class AbsenMhs extends REST_Controller{
     function index_post() {
         $data = array(
             'absensi_absensi_kd_absendsn' => $this->post('absensi_absensi_kd_absendsn'),
+            'mahasiswa_nim' => $this->post('mahasiswa_nim'),
             'mhs_jdwal_kodemhs_jdwl' => $this->post('mhs_jdwal_kodemhs_jdwl'),
             'jam_msk' => $this->post('jam_msk'),
             'jam_keluar' => $this->post('jam_keluar'),
@@ -48,6 +49,7 @@ class AbsenMhs extends REST_Controller{
     function index_put(){
         $data = array(
             'absensi_absensi_kd_absendsn' => $this->put('absensi_absensi_kd_absendsn'),
+            'mahasiswa_nim' => $this->put('mahasiswa_nim'),
             'mhs_jdwal_kodemhs_jdwl' => $this->put('mhs_jdwal_kodemhs_jdwl'),
             'jam_msk' => $this->put('jam_msk'),
             'jam_keluar' => $this->put('jam_keluar'),
@@ -71,12 +73,12 @@ class AbsenMhs extends REST_Controller{
 
     function index_delete(){
         $absensi_kd_absendsn = $this->delete('absensi_kd_absendsn');
-        $mhs_jdwal_kodemhs_jdwl = $this->delete('mhs_jdwal_kodemhs_jdwl');
+        $mahasiswa_nim = $this->delete('mahasiswa_nim');
 
-        if($mhs_jdwal_kodemhs_jdwl === NULL || $absensi_kd_absendsn === NULL){
+        if($mahasiswa_nim === NULL || $absensi_kd_absendsn === NULL){
             $this->response([
                 'responseCode' => '400',
-                'responseDesc' => 'Provide absensi_kd_absendsn and mhs_jdwal_kodemhs_jdwl'
+                'responseDesc' => 'Provide absensi_kd_absendsn and mahasiswa_nim'
             ], REST_Controller::HTTP_BAD_REQUEST);
         } else {
             if($this->absen_mhs->delete($absensi_kd_absendsn) > 0){

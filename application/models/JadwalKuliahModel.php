@@ -31,14 +31,18 @@ Class JadwalKuliahModel extends CI_Model{
 		return $data;
 	}
 
-	public function getJadwalKuliahDosen($thn_akad_id ,$nip, $hari){
-		$this->db->select('min(jk.kodejdwl) as kodejdwl, min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai, 
-			jk.ruangan_namaruang, mk.namamk, 
-			kls.namaklas');
+	public function getJadwalKuliahDosen($thn_akad_id ,$nip, $hari, $tgl){
+		$absensi = "(select * from tik.absensi where tgl = '".$tgl."') as ab";
+
+		$this->db->select('min(jk.kodejdwl) as kodejdwl, min(wk.jam_mulai) as jam_mulai, 
+			max(wk.jam_selesai) as jam_selesai, jk.ruangan_namaruang, mk.namamk, 
+			kls.namaklas, max(ab.kd_absendsn) as kd_absendsn, 
+			min(ab.jam_msk) as abs_jam_msk, max(ab.jam_keluar) as abs_jam_keluar');
 		$this->db->from('tik.jadwal_kul as jk');
 		$this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
 		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
 		$this->db->join('tik.wkt_kuliah as wk', 'jk.wkt_kuliah_kode_jam = wk.kode_jam');
+		$this->db->join($absensi, 'jk.kodejdwl = ab.jadwal_kul_kodejdwl', 'left');
 		$this->db->group_by('jk.ruangan_namaruang, mk.namamk, kls.namaklas');
 		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
 		$this->db->where('jk.staff_nip', $nip);

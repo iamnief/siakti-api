@@ -102,27 +102,39 @@ class JadwalKuliah extends REST_Controller{
         }
     }
 
-    function mahasiswa_get($kelas, $hari, $tgl) {
+    function mahasiswa_get($kelas, $tgl) {
+        $hari = date("N", strtotime($tgl));
+        
         $thn_akad = $this->thn_akad->getTahunAkadAktif();
         $thn_akad_id = $thn_akad[0]['thn_akad_id'];
+        
         $jk = $this->jadwalkuliah->getJadwalKuliahMahasiswa($thn_akad_id, $kelas, $hari);
         $kp = $this->kls_pengganti->getKelasPenggantiMahasiswa($thn_akad_id, $kelas, $tgl);
+        
         $res = array_merge($jk, $kp);
+        
         usort($res, function ($a, $b){
             return $a['jam_mulai'] < $b['jam_mulai'] ? -1 : 1;
         });
+        
         $this->response($res);
     }
 
-    function dosen_get($nip, $hari, $tgl) {
+    function dosen_get($nip, $tgl) {
+        $hari = date("N", strtotime($tgl));
+        
         $thn_akad = $this->thn_akad->getTahunAkadAktif();
         $thn_akad_id = $thn_akad[0]['thn_akad_id'];
-        $jk = $this->jadwalkuliah->getJadwalKuliahDosen($thn_akad_id, $nip, $hari);
+        
+        $jk = $this->jadwalkuliah->getJadwalKuliahDosen($thn_akad_id, $nip, $hari, $tgl);
         $kp = $this->kls_pengganti->getKelasPenggantiDosen($thn_akad_id, $nip, $tgl);
+        
         $res = array_merge($jk, $kp);
+        
         usort($res, function ($a, $b){
             return $a['jam_mulai'] < $b['jam_mulai'] ? -1 : 1;
         });
+        
         $this->response($res);
     }
 }
