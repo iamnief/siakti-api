@@ -15,6 +15,18 @@ Class JadwalKuliahModel extends CI_Model{
 		}
 	}
 
+	public function getJadwalForAbsen($namaruang, $jam_ke, $hari){
+		$this->db->select('min(jk.kodejdwl) as kodejdwl, jk.kelas_kodeklas, mk.namamk');
+		$this->db->from('tik.jadwal_kul as jk');
+		$this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
+		$this->db->group_by('jk.kelas_kodeklas, mk.namamk');
+		$this->db->where('jk.ruangan_namaruang', $namaruang);
+		$this->db->where('jk.wkt_kuliah_kode_jam', $jam_ke);
+		$this->db->where('jk.hari', $hari);
+		$data = $this->db->get()->result_array();
+		return $data;
+	}
+
 	public function getJadwalKuliahMahasiswa($thn_akad_id ,$kodeklas, $hari){
 		$this->db->select('min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai, 
 			jk.ruangan_namaruang, mk.namamk, 

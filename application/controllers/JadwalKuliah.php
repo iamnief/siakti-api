@@ -126,7 +126,17 @@ class JadwalKuliah extends REST_Controller{
         $thn_akad = $this->thn_akad->getTahunAkadAktif();
         $thn_akad_id = $thn_akad[0]['thn_akad_id'];
         
+        $kb = $this->kls_pengganti->getKelasBatalDosenByDate($thn_akad_id, $nip, $tgl);
         $jk = $this->jadwalkuliah->getJadwalKuliahDosen($thn_akad_id, $nip, $hari, $tgl);
+
+        foreach ($jk as $key1 => $value1) {
+            foreach ($kb as $key2 => $value2) {
+                if($value1['kodejdwl'] == $value2['kodejdwl']){
+                    unset($jk[$key1]);
+                }
+            }
+        }
+
         $kp = $this->kls_pengganti->getKelasPenggantiDosen($thn_akad_id, $nip, $tgl);
         
         $res = array_merge($jk, $kp);
@@ -135,6 +145,14 @@ class JadwalKuliah extends REST_Controller{
             return $a['jam_mulai'] < $b['jam_mulai'] ? -1 : 1;
         });
         
+        $this->response($res);
+    }
+
+    function dosenbatal_get($nip){
+        $thn_akad = $this->thn_akad->getTahunAkadAktif();
+        $thn_akad_id = $thn_akad[0]['thn_akad_id'];
+        
+        $res = $this->kls_pengganti->getKelasBatalDosen($thn_akad_id, $nip);
         $this->response($res);
     }
 }
