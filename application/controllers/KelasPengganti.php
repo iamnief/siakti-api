@@ -29,14 +29,7 @@ class KelasPengganti extends REST_Controller
 
     function index_post()
     {
-        $data = array(
-            'kd_gantikls' => $this->post('kd_gantikls'),
-            'tgl_batal' => $this->post('tgl_batal'),
-            'jadwal_kul_kodejdwl' => $this->post('jadwal_kul_kodejdwl'),
-            'ruangan_namaruang' => $this->post('ruangan_namaruang'),
-            'wkt_kuliah_kode_jam' => $this->post('wkt_kuliah_kode_jam'),
-            'tgl_pengganti' => $this->post('tgl_pengganti')
-        );
+        $data = $this->post();
 
         if ($this->kls_pengganti->insert($data) > 0) {
             $this->response([
@@ -54,14 +47,16 @@ class KelasPengganti extends REST_Controller
 
     function index_put()
     {
-        $data = array(
-            'kd_gantikls' => $this->put('kd_gantikls'),
-            'tgl_batal' => $this->put('tgl_batal'),
-            'jadwal_kul_kodejdwl' => $this->put('jadwal_kul_kodejdwl'),
-            'ruangan_namaruang' => $this->put('ruangan_namaruang'),
-            'wkt_kuliah_kode_jam' => $this->put('wkt_kuliah_kode_jam'),
-            'tgl_pengganti' => $this->put('tgl_pengganti')
-        );
+        // $data = array(
+        //     'kd_gantikls' => $this->put('kd_gantikls'),
+        //     'tgl_batal' => $this->put('tgl_batal'),
+        //     'jadwal_kul_kodejdwl' => $this->put('jadwal_kul_kodejdwl'),
+        //     'ruangan_namaruang' => $this->put('ruangan_namaruang'),
+        //     'wkt_kuliah_kode_jam' => $this->put('wkt_kuliah_kode_jam'),
+        //     'tgl_pengganti' => $this->put('tgl_pengganti')
+        // );
+
+        $data = $this->put();
 
         if ($this->kls_pengganti->update($data) > 0) {
             $this->response([
@@ -101,5 +96,33 @@ class KelasPengganti extends REST_Controller
                 ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }
+    }
+
+    function batalkelas_post()
+    {
+        $post = $this->post();
+        $n = 0;
+        $kode = intval($post['kode']);
+        $jml_jam = intval($post['jml_jam']);
+        if ($post['tipe_kelas'] == 'normal') {
+            for ($i = 0; $i < $jml_jam; $i++) {
+                $input = array(
+                    'tgl_batal' => $post['tgl_batal'],
+                    'jadwal_kul_kodejdwl' => $kode + $i
+                );
+                $n += $this->kls_pengganti->insert($input);
+            }
+        } else if ($post['tipe_kelas'] == 'pengganti') {
+            for ($i = 0; $i < $jml_jam; $i++) {
+                $input = array(
+                    'kd_gantikls' => $kode,
+                    'ruangan_namaruang' => null,
+                    'wkt_kuliah_kode_jam' => null,
+                    'tgl_pengganti' => null
+                );
+                $this->kls_pengganti->update($input);
+            }
+        }
+        $this->response(['jml_jam' => $n]);
     }
 }
