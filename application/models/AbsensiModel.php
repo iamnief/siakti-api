@@ -15,6 +15,18 @@ Class AbsensiModel extends CI_Model{
 		}
 	}
 
+	public function getAbsensiByTglJad($data_absensi){
+		if($data_absensi === NULL || !is_array($data_absensi)){
+			return null;
+		} else {
+			$this->db->select('*');
+			$this->db->from('tik.absensi');
+			$this->db->where($data_absensi);
+			$data = $this->db->get()->result_array();
+			return $data;
+		}
+	}
+
 	public function insert($data){
 		$insert = $this->db->insert('tik.absensi', $data);
 		return $this->db->affected_rows();
