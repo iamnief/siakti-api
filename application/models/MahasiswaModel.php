@@ -15,6 +15,19 @@ Class MahasiswaModel extends CI_Model{
 		}
 	}
 
+	public function getMahasiswaByKelas($kodeklas){
+		$this->db->select('nim');
+		$this->db->from('tik.mahasiswa');
+		$this->db->where('kelas_kodeklas', $kodeklas);
+		return $this->db->get()->result_array();
+	}
+
+	public function verifMahasiswa($nim, $pin){
+		$this->db->where('nim', $nim);
+		$this->db->where('pin', $pin);
+		return $this->db->get('tik.mahasiswa')->num_rows();
+	}
+
 	public function insert($data){
 		$insert = $this->db->insert('tik.mahasiswa', $data);
 		return $this->db->affected_rows();
