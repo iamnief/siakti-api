@@ -32,7 +32,7 @@ class Absensi extends REST_Controller{
             'mahasiswa_nim' => $this->post('mahasiswa_nim'),
             'staff_nip' => $this->post('staff_nip'),
             'pertemuanke' => $this->post('pertemuanke'),
-            'jadwal_kul_kode_jadwal' => $this->post('jadwal_kul_kode_jadwal'),
+            'jadwal_kul_kodejdwl' => $this->post('jadwal_kul_kodejdwl'),
             'kls_pengganti_kd_gantikls' => $this->post('kls_pengganti_kd_gantikls')
         );
 
@@ -51,20 +51,7 @@ class Absensi extends REST_Controller{
     }
 
     function index_put(){
-        $kd_absendsn = $this->put('kd_absendsn');
-
-        $data = array(
-            'kd_absendsn' => $kd_absendsn,
-            'tgl' => $this->put('tgl'),
-            'jam_msk' => $this->put('jam_msk'),
-            'jam_keluar' => $this->put('jam_keluar'),
-            'materi' => $this->put('materi'),
-            'mahasiswa_nim' => $this->put('mahasiswa_nim'),
-            'staff_nip' => $this->put('staff_nip'),
-            'pertemuanke' => $this->put('pertemuanke'),
-            'jadwal_kul_kode_jadwal' => $this->put('jadwal_kul_kode_jadwal'),
-            'kls_pengganti_kd_gantikls' => $this->put('kls_pengganti_kd_gantikls')
-        );
+        $data = $this->put();
 
         if($this->absensi->update($data) > 0){
             $this->response([
