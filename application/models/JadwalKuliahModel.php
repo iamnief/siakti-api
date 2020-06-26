@@ -15,14 +15,18 @@ Class JadwalKuliahModel extends CI_Model{
 		}
 	}
 
-	public function getJadwalForAbsen($namaruang, $jam_ke, $hari){
-		$this->db->select('min(jk.kodejdwl) as kodejdwl, jk.kelas_kodeklas, mk.namamk');
+	public function getJadwalForAbsen($thn_akad_id, $namaruang, $hari, $waktu){
+		$this->db->select('min(jk.kodejdwl) as kodejdwl, jk.kelas_kodeklas, mk.namamk,
+		min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai');
 		$this->db->from('tik.jadwal_kul as jk');
 		$this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
-		$this->db->group_by('jk.kelas_kodeklas, mk.namamk');
+		$this->db->join('tik.wkt_kuliah as wk', 'jk.wkt_kuliah_kode_jam = wk.kode_jam');
+		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
 		$this->db->where('jk.ruangan_namaruang', $namaruang);
-		$this->db->where('jk.wkt_kuliah_kode_jam', $jam_ke);
 		$this->db->where('jk.hari', $hari);
+		$this->db->where('jam_mulai <=', $waktu);
+		$this->db->where('jam_selesai >=', $waktu);
+		$this->db->group_by('jk.kelas_kodeklas, mk.namamk');
 		$data = $this->db->get()->result_array();
 		return $data;
 	}
@@ -48,14 +52,14 @@ Class JadwalKuliahModel extends CI_Model{
 
 		$this->db->select('min(jk.kodejdwl) as kodejdwl, min(wk.jam_mulai) as jam_mulai, 
 			max(wk.jam_selesai) as jam_selesai, jk.ruangan_namaruang, mk.namamk, 
-			kls.namaklas, max(ab.kd_absendsn) as kd_absendsn, 
+			kls.kodeklas, kls.namaklas, count(wk.jam_mulai) as jml_jam, max(ab.kd_absendsn) as kd_absendsn, 
 			min(ab.jam_msk) as abs_jam_msk, max(ab.jam_keluar) as abs_jam_keluar');
 		$this->db->from('tik.jadwal_kul as jk');
 		$this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
 		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
 		$this->db->join('tik.wkt_kuliah as wk', 'jk.wkt_kuliah_kode_jam = wk.kode_jam');
 		$this->db->join($absensi, 'jk.kodejdwl = ab.jadwal_kul_kodejdwl', 'left');
-		$this->db->group_by('jk.ruangan_namaruang, mk.namamk, kls.namaklas');
+		$this->db->group_by('jk.ruangan_namaruang, mk.namamk, kls.kodeklas, kls.namaklas');
 		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
 		$this->db->where('jk.staff_nip', $nip);
 		$this->db->where('hari', $hari);
