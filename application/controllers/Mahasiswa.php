@@ -145,5 +145,12 @@ class Mahasiswa extends REST_Controller{
             }
         }
     }
+
+    function verif_post(){
+        $nim = $this->post('nim');
+        $pin = $this->post('pin');
+        $data = $this->mahasiswa->verifMahasiswa($nim, $pin);
+        $this->response(['jumlah'=>$data]);
+    }
 }
 ?>
