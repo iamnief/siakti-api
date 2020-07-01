@@ -109,6 +109,16 @@ class JadwalKuliah extends REST_Controller{
         $thn_akad_id = $thn_akad[0]['thn_akad_id'];
         
         $jk = $this->jadwalkuliah->getJadwalKuliahMahasiswa($thn_akad_id, $kelas, $hari);
+        $kb = $this->kls_pengganti->getKelasBatalMahasiswaByDate($thn_akad_id, $kelas, $tgl);
+
+        foreach ($jk as $key1 => $value1) {
+            foreach ($kb as $key2 => $value2) {
+                if($value1['kodejdwl'] == $value2['kodejdwl']){
+                    unset($jk[$key1]);
+                }
+            }
+        }
+
         $kp = $this->kls_pengganti->getKelasPenggantiMahasiswa($thn_akad_id, $kelas, $tgl);
         
         $res = array_merge($jk, $kp);

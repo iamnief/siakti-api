@@ -104,12 +104,17 @@ class AbsenMhs extends REST_Controller
     function mulaikelas_post()
     {
         $kodeklas = $this->post('kodeklas');
-        $data_absensi['tgl'] = $this->post('tgl');
-
+        $data_absensi = null;
         if ($this->post('tipe_kelas') == 'normal') {
-            $data_absensi['jadwal_kul_kodejdwl'] = $this->post('jadwal_kul_kodejdwl');
-        } else if ($this->post('tipe kelas') == 'pengganti') {
-            $data_absensi['kls_pengganti_kd_gantikls'] = $this->post('kls_pengganti_kd_gantikls');
+            $data_absensi = array(
+                'jadwal_kul_kodejdwl' => $this->post('kode'),
+                'tgl' => $this->post('tgl')
+            );
+        } else if ($this->post('tipe_kelas') == 'pengganti') {
+            $data_absensi = array(
+                'kls_pengganti_kd_gantikls' => $this->post('kode'),
+                'tgl' => $this->post('tgl')
+            );
         }
 
         $absensi = $this->absensi->getAbsensiByTglJad($data_absensi);
@@ -154,6 +159,8 @@ class AbsenMhs extends REST_Controller
         // Kelas Pengganti
         $kp = $this->kelaspengganti->getKelasPenggantiForAbsen($thn_akad_id, $namaruang, $tgl, $waktu);
 
+        // Kelas Fix
+        $kf = null;
         $absensi = null;
         $response = null;
 
@@ -165,14 +172,17 @@ class AbsenMhs extends REST_Controller
             ];
         } else if (count($kp) == 1) { // Jika ada Kelas Pengganti
 
+            $kf = $kp;
+
             if ($kelas_kodeklas == $kp[0]['kelas_kodeklas']) { // Jika kelas sesuai
 
                 $data_absensi = array(
-                    'kls_pengganti_kd_gantikls' => $kp[0]['kodejdwl'],
+                    'kls_pengganti_kd_gantikls' => $kp[0]['kd_gantikls'],
                     'tgl' => $tgl
                 );
 
                 $absensi = $this->absensi->getAbsensiByTglJad($data_absensi);
+
             } else { // Jika kelas tidak sesuai
 
                 $response = [
@@ -182,6 +192,8 @@ class AbsenMhs extends REST_Controller
             }
         } else if (count($jk) == 1) { // Jika ada Jadwal Kuliah
 
+            $kf = $jk;
+
             $is_batal = $this->kelaspengganti->isKelasBatalJadwal($jk[0]['kodejdwl'], $tgl);
 
             if (!$is_batal) { // Jika kelas tidak batal
@@ -189,10 +201,11 @@ class AbsenMhs extends REST_Controller
                 if ($kelas_kodeklas == $jk[0]['kelas_kodeklas']) { // Jika kelas sesuai
 
                     $data_absensi = array(
-                        'jadwal_kul_kodejdwl' => $jk['kodejdwl'],
+                        'jadwal_kul_kodejdwl' => $jk[0]['kodejdwl'],
                         'tgl' => $tgl
                     );
                     $absensi = $this->absensi->getAbsensiByTglJad($data_absensi);
+
                 } else { // Jika kelas tidak sesuai
 
                     $response = [
@@ -209,12 +222,15 @@ class AbsenMhs extends REST_Controller
             }
         }
 
-        if (is_array($absensi)) {
+        if (is_array($absensi)) { // Jika Ada Kelas
             if (count($absensi) == 0) { // Jika belum dicatat di tabel absensi (kelas belum mulai)
 
                 $response = [
                     'message' => 'Kelas Belum dimulai',
-                    'code' => 'X02'
+                    'code' => 'X02',
+                    'data1' => $kf,
+                    'data2' => $absensi,
+                    'data3' => $data_absensi
                 ];
             } else { // Jika sudah ada di tabel absensi (kelas sudah mulai)
 
@@ -245,7 +261,7 @@ class AbsenMhs extends REST_Controller
                                 'message' => 'Absen Masuk Berhasil Tercatat',
                                 'code' => 'Y01',
                                 'data' => array(
-                                    'namamk' => $kp[0]['namamk']
+                                    'namamk' => $kf[0]['namamk']
                                 )
                             ];
                         }
@@ -260,10 +276,10 @@ class AbsenMhs extends REST_Controller
 
                     if ($absen_mhs[0]['jam_masuk'] == null) { // Jika mahasiswa belum absen masuk
 
-                        $this->response([
+                        $response = [
                             'message' => 'Kelas Sudah Selesai',
                             'code' => 'X06'
-                        ]);
+                        ];
                     } else if ($absen_mhs[0]['jam_keluar'] == null) { // Jika mahasiswa belum absen keluar
 
                         $update_absen = array(
@@ -287,7 +303,7 @@ class AbsenMhs extends REST_Controller
                                 'message' => 'Absen Keluar Berhasil Tercatat',
                                 'code' => 'Y02',
                                 'data' => array(
-                                    'namamk' => $kp[0]['namamk']
+                                    'namamk' => $kf[0]['namamk']
                                 )
                             ];
                         }

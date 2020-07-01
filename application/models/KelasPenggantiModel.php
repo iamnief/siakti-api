@@ -16,7 +16,6 @@ Class KelasPenggantiModel extends CI_Model{
 	}
 
 	public function getKelasBatalDosen($thn_akad_id, $nip){
-		$tgl_ganti = null;
 		$this->db->select('min(kp.jadwal_kul_kodejdwl) as kodejdwl, kp.tgl_batal, 
 			count(kp.kd_gantikls) as jml_jam, min(kp.kd_gantikls) as kd_gantikls, 
 			jk.ruangan_namaruang, mk.namamk, kls.namaklas');
@@ -25,9 +24,23 @@ Class KelasPenggantiModel extends CI_Model{
         $this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
 		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
 		$this->db->group_by('kp.tgl_batal, jk.ruangan_namaruang, mk.namamk, kls.namaklas');
-		$this->db->where('kp.tgl_pengganti', $tgl_ganti);
+		$this->db->where('kp.status !=', 'diterima');
 		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
 		$this->db->where('jk.staff_nip', $nip);
+		$data = $this->db->get()->result_array();
+		return $data;
+	}
+
+	public function getKelasBatalMahasiswaByDate($thn_akad_id, $kodeklas, $tgl_batal){
+		$this->db->select('min(kp.jadwal_kul_kodejdwl) as kodejdwl, kp.ruangan_namaruang, mk.namamk, st.nama');
+		$this->db->from('tik.kls_pengganti as kp');
+		$this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
+        $this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
+		$this->db->join('tik.staff as st', 'jk.staff_nip = st.nip');
+		$this->db->group_by('kp.ruangan_namaruang, mk.namamk, st.nama');
+		$this->db->where('kp.tgl_batal', $tgl_batal);
+		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
+		$this->db->where('jk.kelas_kodeklas', $kodeklas);
 		$data = $this->db->get()->result_array();
 		return $data;
 	}
@@ -56,21 +69,45 @@ Class KelasPenggantiModel extends CI_Model{
 	}
 
 	public function getKelasPenggantiForAbsen($thn_akad_id, $namaruang, $tgl, $waktu){
-		$this->db->select('min(kp.kd_gantikls) as kd_gantikls, jk.kelas_kodeklas, mk.namamk,
-		min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai');
+		$this->db->select('kp.kd_gantikls, jk.kelas_kodeklas, jk.matakuliah_kodemk,
+		wk.jam_mulai, wk.jam_selesai');
 		$this->db->from('tik.kls_pengganti as kp');
 		$this->db->join('tik.wkt_kuliah as wk', 'kp.wkt_kuliah_kode_jam = wk.kode_jam');
 		$this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
-		$this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
-		$this->db->group_by('jk.kelas_kodeklas, mk.namamk');
 		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
-		$this->db->where('jk.ruangan_namaruang', $namaruang);
+		$this->db->where('kp.ruangan_namaruang', $namaruang);
 		$this->db->where('kp.tgl_pengganti', $tgl);
-		$this->db->where('jam_mulai <= ', $waktu);
-		$this->db->where('jam_selesai >= ', $waktu);
+		$this->db->where('wk.jam_mulai <= ', $waktu);
+		$this->db->where('wk.jam_selesai >= ', $waktu);
 		$this->db->where('kp.status', 'diterima');
 		$data = $this->db->get()->result_array();
-		return $data;
+		
+		if (count($data) <= 0) return $data;
+		else {
+			return $this->getKelasPenggantiForAbsen2(
+				$thn_akad_id, 
+				$namaruang, 
+				$tgl, 
+				$data[0]['kelas_kodeklas'],
+				$data[0]['matakuliah_kodemk']
+			);
+		}
+	}
+
+	public function getKelasPenggantiForAbsen2($thn_akad_id, $namaruang, $tgl, $kodeklas, $kodemk){
+		$this->db->select('min(kp.kd_gantikls) as kd_gantikls, jk.kelas_kodeklas, kls.namaklas, mk.namamk');
+		$this->db->from('tik.kls_pengganti as kp');
+		$this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
+		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
+		$this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
+		$this->db->group_by('jk.kelas_kodeklas, kls.namaklas, mk.namamk');
+		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
+		$this->db->where('kp.ruangan_namaruang', $namaruang);
+		$this->db->where('jk.kelas_kodeklas', $kodeklas);
+		$this->db->where('jk.matakuliah_kodemk', $kodemk);
+		$this->db->where('kp.tgl_pengganti', $tgl);
+		$this->db->where('kp.status', 'diterima');
+		return $this->db->get()->result_array();
 	}
 
 	public function getKelasPenggantiMahasiswa($thn_akad_id ,$kodeklas, $tgl_pengganti){

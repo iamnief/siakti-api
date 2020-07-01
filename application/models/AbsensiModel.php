@@ -16,7 +16,7 @@ Class AbsensiModel extends CI_Model{
 	}
 
 	public function getAbsensiByTglJad($data_absensi){
-		if($data_absensi === NULL || !is_array($data_absensi)){
+		if($data_absensi == NULL || !is_array($data_absensi)){
 			return null;
 		} else {
 			$this->db->select('*');
