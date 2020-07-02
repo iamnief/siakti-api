@@ -227,10 +227,7 @@ class AbsenMhs extends REST_Controller
 
                 $response = [
                     'message' => 'Kelas Belum dimulai',
-                    'code' => 'X02',
-                    'data1' => $kf,
-                    'data2' => $absensi,
-                    'data3' => $data_absensi
+                    'code' => 'X02'
                 ];
             } else { // Jika sudah ada di tabel absensi (kelas sudah mulai)
 
@@ -240,11 +237,18 @@ class AbsenMhs extends REST_Controller
 
                     if ($absen_mhs[0]['jam_masuk'] == null) { // Jika mahasiswa belum absen
 
+                        $telat = 50;
+                        if ($waktu > $absensi[0]['jam_msk']){
+                            $sekarang = new DateTime($tgl . ' ' . $waktu);
+                            $selisih = $sekarang->diff(new DateTime($tgl . ' ' . $absensi[0]['jam_msk']));
+                            $telat += $selisih;
+                        }
                         $update_absen = array(
                             'jam_masuk' => $waktu,
                             'status' => 'Hadir',
                             'mahasiswa_nim' => $nim,
-                            'absensi_kd_absendsn' => $absensi[0]['kd_absendsn']
+                            'absensi_kd_absendsn' => $absensi[0]['kd_absendsn'],
+                            'telat' => $telat
                         );
 
                         $update = $this->absen_mhs->update($update_absen);
@@ -282,11 +286,13 @@ class AbsenMhs extends REST_Controller
                         ];
                     } else if ($absen_mhs[0]['jam_keluar'] == null) { // Jika mahasiswa belum absen keluar
 
+                        $telat = intval($absen_mhs[0]['telat']) - 50;
                         $update_absen = array(
                             'jam_keluar' => $waktu,
                             'status' => 'Hadir',
                             'mahasiswa_nim' => $nim,
-                            'absensi_kd_absendsn' => $absensi[0]['kd_absendsn']
+                            'absensi_kd_absendsn' => $absensi[0]['kd_absendsn'],
+                            'telat' => $telat
                         );
 
                         $update = $this->absen_mhs->update($update_absen);

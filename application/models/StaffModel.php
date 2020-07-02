@@ -15,6 +15,18 @@ Class StaffModel extends CI_Model{
 		}
 	}
 
+	public function getStaffJab($nip, $tgl){
+		if ($nip == null){
+			return [];
+		} else {
+			$this->db->where('staff_nip', $nip);
+			$this->db->where('tgl_mulai <=', $tgl);
+			$this->db->where('tgl_selesai >=', $tgl);
+			$jab = $this->db->get('tik.jab_dsn')->result_array();
+			return $jab;
+		}
+	}
+
 	public function insert($data){
 		$insert = $this->db->insert('tik.staff', $data);
 		return $this->db->affected_rows();

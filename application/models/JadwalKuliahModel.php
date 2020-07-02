@@ -15,6 +15,23 @@ Class JadwalKuliahModel extends CI_Model{
 		}
 	}
 
+	public function getJamIsi($kode, $hari, $pilih){
+		$this->db->select('wkt_kuliah_kode_jam as kode_jam');
+		$this->db->from('tik.jadwal_kul');
+		$this->db->where('hari', $hari);
+		if ($pilih == 'ruangan'){
+			$this->db->where('ruangan_namaruang', $kode);
+		} else if ($pilih == 'kelas'){
+			$this->db->where('kelas_kodeklas', $kode);
+		} else if ($pilih == 'dosen'){
+			$this->db->where('staff_nip', $kode);
+		} else {
+			return [];
+		}
+		$this->db->order_by('wkt_kuliah_kode_jam');
+		return $this->db->get()->result_array();
+	}
+
 	public function getJadwalForAbsen($thn_akad_id, $namaruang, $hari, $waktu){
 		$this->db->select('jk.kodejdwl, jk.kelas_kodeklas, jk.matakuliah_kodemk, 
 		wk.jam_mulai, wk.jam_selesai');

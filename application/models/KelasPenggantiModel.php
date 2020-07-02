@@ -15,16 +15,53 @@ Class KelasPenggantiModel extends CI_Model{
 		}
 	}
 
+	public function getJamIsi($kode, $tgl, $pilih){
+		$this->db->select('kp.wkt_kuliah_kode_jam as kode_jam');
+		$this->db->from('tik.kls_pengganti as kp');
+		$this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
+		$this->db->where('kp.tgl_pengganti', $tgl);
+		if ($pilih == 'ruangan'){
+			$this->db->where('kp.ruangan_namaruang', $kode);
+		} else if ($pilih == 'kelas'){
+			$this->db->where('jk.kelas_kodeklas', $kode);
+		} else if ($pilih == 'dosen'){
+			$this->db->where('jk.staff_nip', $kode);
+		} else {
+			return [];
+		}
+		$this->db->order_by('kp.wkt_kuliah_kode_jam');
+		return $this->db->get()->result_array();
+	}
+
+	public function getJamBatal($kode, $tgl, $pilih){
+		$this->db->select('jk.wkt_kuliah_kode_jam as kode_jam');
+		$this->db->from('tik.kls_pengganti as kp');
+		$this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
+		$this->db->where('kp.tgl_batal', $tgl);
+		if ($pilih == 'ruangan'){
+			$this->db->where('jk.ruangan_namaruang', $kode);
+		} else if ($pilih == 'kelas'){
+			$this->db->where('jk.kelas_kodeklas', $kode);
+		} else if ($pilih == 'dosen'){
+			$this->db->where('jk.staff_nip', $kode);
+		} else {
+			return [];
+		}
+		$this->db->order_by('jk.wkt_kuliah_kode_jam');
+		return $this->db->get()->result_array();
+	}
+
 	public function getKelasBatalDosen($thn_akad_id, $nip){
+		$tgl_ganti = null;
 		$this->db->select('min(kp.jadwal_kul_kodejdwl) as kodejdwl, kp.tgl_batal, 
 			count(kp.kd_gantikls) as jml_jam, min(kp.kd_gantikls) as kd_gantikls, 
-			jk.ruangan_namaruang, mk.namamk, kls.namaklas');
+			jk.ruangan_namaruang, mk.namamk, kls.namaklas, kls.kodeklas');
 		$this->db->from('tik.kls_pengganti as kp');
 		$this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
         $this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
 		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
-		$this->db->group_by('kp.tgl_batal, jk.ruangan_namaruang, mk.namamk, kls.namaklas');
-		$this->db->where('kp.status !=', 'diterima');
+		$this->db->group_by('kp.tgl_batal, jk.ruangan_namaruang, mk.namamk, kls.namaklas, kls.kodeklas');
+		$this->db->where('kp.status !=', 'disetujui');
 		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
 		$this->db->where('jk.staff_nip', $nip);
 		$data = $this->db->get()->result_array();
@@ -79,7 +116,7 @@ Class KelasPenggantiModel extends CI_Model{
 		$this->db->where('kp.tgl_pengganti', $tgl);
 		$this->db->where('wk.jam_mulai <= ', $waktu);
 		$this->db->where('wk.jam_selesai >= ', $waktu);
-		$this->db->where('kp.status', 'diterima');
+		$this->db->where('kp.status', 'disetujui');
 		$data = $this->db->get()->result_array();
 		
 		if (count($data) <= 0) return $data;
@@ -106,7 +143,7 @@ Class KelasPenggantiModel extends CI_Model{
 		$this->db->where('jk.kelas_kodeklas', $kodeklas);
 		$this->db->where('jk.matakuliah_kodemk', $kodemk);
 		$this->db->where('kp.tgl_pengganti', $tgl);
-		$this->db->where('kp.status', 'diterima');
+		$this->db->where('kp.status', 'disetujui');
 		return $this->db->get()->result_array();
 	}
 
@@ -123,7 +160,7 @@ Class KelasPenggantiModel extends CI_Model{
 		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
 		$this->db->where('jk.kelas_kodeklas', $kodeklas);
 		$this->db->where('kp.tgl_pengganti', $tgl_pengganti);
-		$this->db->where('kp.status', 'diterima');
+		$this->db->where('kp.status', 'disetujui');
 		$data = $this->db->get()->result_array();
 		return $data;
 	}
@@ -145,7 +182,7 @@ Class KelasPenggantiModel extends CI_Model{
 		$this->db->where('jk.thn_akad_thn_akad_id', $thn_akad_id);
 		$this->db->where('jk.staff_nip', $nip);
 		$this->db->where('kp.tgl_pengganti', $tgl_pengganti);
-		$this->db->where('kp.status', 'diterima');
+		$this->db->where('kp.status', 'disetujui');
 		$data = $this->db->get()->result_array();
 		return $data;
 	}

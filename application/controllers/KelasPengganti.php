@@ -108,7 +108,8 @@ class KelasPengganti extends REST_Controller
             for ($i = 0; $i < $jml_jam; $i++) {
                 $input = array(
                     'tgl_batal' => $post['tgl_batal'],
-                    'jadwal_kul_kodejdwl' => $kode + $i
+                    'jadwal_kul_kodejdwl' => $kode + $i,
+                    'status' => 'belum diajukan'
                 );
                 $n += $this->kls_pengganti->insert($input);
             }

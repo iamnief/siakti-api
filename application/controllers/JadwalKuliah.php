@@ -165,5 +165,87 @@ class JadwalKuliah extends REST_Controller{
         $res = $this->kls_pengganti->getKelasBatalDosen($thn_akad_id, $nip);
         $this->response($res);
     }
+
+    function jam_terisi_post(){
+        $namaruang = $this->post('namaruang');
+        $tgl = $this->post('tgl');
+        $nip = $this->post('nip');
+        $kodeklas = $this->post('kodeklas');
+        $hari = date("N", strtotime($tgl));
+
+        
+        $jam_ruang_jk_isi = $this->jadwalkuliah->getJamIsi($namaruang, $hari, 'ruangan');
+        $jam_ruang_jk_batal = $this->kls_pengganti->getJamBatal($namaruang, $tgl, 'ruangan');
+        $jam_ruang_kp_isi = $this->kls_pengganti->getJamIsi($namaruang, $tgl, 'ruangan');
+
+        $jam_dsn_jk_isi = $this->jadwalkuliah->getJamIsi($nip, $hari, 'dosen');
+        $jam_dsn_jk_batal = $this->kls_pengganti->getJamBatal($nip, $tgl, 'dosen');
+        $jam_dsn_kp_isi = $this->kls_pengganti->getJamIsi($nip, $tgl, 'dosen');
+
+        $jam_mhs_jk_isi = $this->jadwalkuliah->getJamIsi($kodeklas, $hari, 'kelas');
+        $jam_mhs_jk_batal = $this->kls_pengganti->getJamBatal($kodeklas, $tgl, 'kelas');
+        $jam_mhs_kp_isi = $this->kls_pengganti->getJamIsi($kodeklas, $tgl, 'kelas');
+
+        $keterangan_jam = ['kosong','kosong','kosong','kosong','kosong','kosong','kosong','kosong','kosong','kosong','kosong','kosong'];
+
+        // Ruangan
+        foreach ($jam_ruang_jk_isi as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'isi';
+        }
+
+        foreach ($jam_ruang_jk_batal as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'kosong';
+        }
+
+        foreach ($jam_ruang_kp_isi as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'isi';
+        }
+
+        // Kelas
+        foreach ($jam_mhs_jk_isi as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'isi';
+        }
+
+        foreach ($jam_mhs_jk_batal as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'kosong';
+        }
+
+        foreach ($jam_mhs_kp_isi as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'isi';
+        }
+
+        // Dosen
+        foreach ($jam_dsn_jk_isi as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'isi';
+        }
+
+        foreach ($jam_dsn_jk_batal as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'kosong';
+        }
+
+        foreach ($jam_dsn_kp_isi as $key => $value) {
+            # code...
+            $i = intval($value['kode_jam'])-1;
+            $keterangan_jam[$i] = 'isi';
+        }
+
+        $this->response($keterangan_jam);
+    }
 }
 ?>

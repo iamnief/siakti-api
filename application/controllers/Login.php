@@ -8,7 +8,10 @@ use Restserver\Libraries\REST_Controller;
 class Login extends REST_Controller{
 
 	function __construct($config = 'rest'){
-		parent::__construct($config);
+        parent::__construct($config);
+		$this->load->model('StaffModel', 'staff');
+
+		date_default_timezone_set("Asia/Jakarta");
 	}
 
 	function index_post(){
@@ -24,18 +27,25 @@ class Login extends REST_Controller{
 
         if($cek_m > 0){
             $res = $this->db->get_where('tik.mahasiswa',$where)->result_array();
-            $data_session = array(
-                'usr_name' => $username,
-                'password' => $password
-            );
+            // $data_session = array(
+            //     'usr_name' => $username,
+            //     'password' => $password
+            // );
             $this->response($res);
         }
         elseif ($cek_d > 0) {
             $res = $this->db->get_where('tik.staff',$where)->result_array();
-            $data_session = array(
-                'usr_name' => $username,
-                'password' => $password
-            );
+            $jab_struk = $this->staff->getStaffJab($res[0]['nip'], date('d-m-Y'));
+
+            // $data_session = array(
+            //     'usr_name' => $username,
+            //     'password' => $password
+            // );
+
+            if (count($jab_struk) > 0){
+                $res[0]['jab_dsn'] = $jab_struk[0]['jab_struk_nama_jab'];
+            }
+
             $this->response($res);
         }
         else{
