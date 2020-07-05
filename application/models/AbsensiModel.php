@@ -27,6 +27,19 @@ Class AbsensiModel extends CI_Model{
 		}
 	}
 
+	public function getPerkuliahanProdi($prodi_id){
+		$this->db->select('a.tgl, a.jam_msk, a.jam_keluar, a.materi, kls.namaklas, st.nama, mk.namamk');
+		$this->db->from('tik.absensi as a');
+		$this->db->join('tik.jadwal_kul as jk', 'a.jadwal_kul_kodejdwl = jk.kodejdwl');
+		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
+		$this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');
+		$this->db->join('tik.staff as st', 'jk.staff_nip = st.nip');
+		$this->db->where('kls.prodi_prodi_id', $prodi_id);
+		$this->db->where('a.status', null);
+		$this->db->order_by('a.tgl, a.jam_msk, kls.namaklas');
+		return $this->db->get()->result_array();
+	}
+
 	public function insert($data){
 		$insert = $this->db->insert('tik.absensi', $data);
 		return $this->db->affected_rows();

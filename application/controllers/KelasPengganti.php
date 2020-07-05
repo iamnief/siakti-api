@@ -126,4 +126,31 @@ class KelasPengganti extends REST_Controller
         }
         $this->response(['jml_jam' => $n]);
     }
+
+    function prodi_get($prodi_id = '')
+    {
+        if ($prodi_id == '') {
+            $this->response([]);
+        } else {
+            $this->response($this->kls_pengganti->getKelasPenggantiProdi($prodi_id));
+        }
+    }
+
+    function ajukan_put($update = '')
+    {
+        $n = 0;
+        $jam = $this->put('kode_jam');
+        $kd_gantikls = intval($this->put('kd_gantikls'));
+        for ($i = 0; $i < count($jam); $i++) {
+            $data = array(
+                'tgl_pengganti' => $this->put('tgl_pengganti'),
+                'ruangan_namaruang' => $this->put('namaruang'),
+                'kd_gantikls' => $kd_gantikls + $i,
+                'wkt_kuliah_kode_jam' => $jam[$i],
+                'status' => 'diajukan'
+            );
+            $n += $this->kls_pengganti->update($data);
+        }
+        $this->response($n . ' data diupdate');
+    }
 }

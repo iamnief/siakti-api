@@ -91,5 +91,13 @@ class Absensi extends REST_Controller{
             }
         }
     }
+
+    function perkuliahan_get($prodi_id = ''){
+        if ($prodi_id == ''){
+            $this->response('gagal');
+        } else {
+            return $this->response($this->absensi->getPerkuliahanProdi($prodi_id));
+        }
+    }
 }
 ?>
