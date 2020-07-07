@@ -191,8 +191,9 @@ class KelasPenggantiModel extends CI_Model
 
 	public function getKelasPenggantiProdi($prodi_id)
 	{
-		$this->db->select('st.nama as dosen, mk.namamk, kls.namaklas, kp.tgl_pengganti, kp.ruangan_namaruang, 
-			min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai, kp.status');
+		$this->db->select('st.nama as dosen, mk.namamk, kls.namaklas, kp.tgl_pengganti,
+			kp.ruangan_namaruang, min(wk.jam_mulai) as jam_mulai, max(wk.jam_selesai) as jam_selesai,
+			kp.status, min(kp.kd_gantikls) as kd_gantikls, count(kp.kd_gantikls) as jml_jam, kp.tgl_batal');
 		$this->db->from('tik.kls_pengganti as kp');
 		$this->db->join('tik.wkt_kuliah as wk', 'kp.wkt_kuliah_kode_jam = wk.kode_jam');
 		$this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
@@ -201,7 +202,7 @@ class KelasPenggantiModel extends CI_Model
 		$this->db->join('tik.staff as st', 'jk.staff_nip = st.nip');
 		$this->db->where('kls.prodi_prodi_id', $prodi_id);
 		$this->db->where('kp.status', 'diajukan');
-		$this->db->group_by('st.nama, mk.namamk, kls.namaklas, kp.tgl_pengganti, kp.ruangan_namaruang, kp.status');
+		$this->db->group_by('st.nama, mk.namamk, kls.namaklas, kp.tgl_pengganti, kp.ruangan_namaruang, kp.status, kp.tgl_batal');
 		return $this->db->get()->result_array();
 	}
 
