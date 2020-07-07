@@ -98,6 +98,7 @@ class KelasPengganti extends REST_Controller
         }
     }
 
+    // Dosen membatalkan kelas
     function batalkelas_post()
     {
         $post = $this->post();
@@ -127,6 +128,7 @@ class KelasPengganti extends REST_Controller
         $this->response(['jml_jam' => $n]);
     }
 
+    // KPS melihat kelas pengganti
     function prodi_get($prodi_id = '')
     {
         if ($prodi_id == '') {
@@ -136,6 +138,7 @@ class KelasPengganti extends REST_Controller
         }
     }
 
+    // Dosen mengajukan kelas pengganti
     function ajukan_put($update = '')
     {
         $n = 0;
@@ -148,6 +151,24 @@ class KelasPengganti extends REST_Controller
                 'kd_gantikls' => $kd_gantikls + $i,
                 'wkt_kuliah_kode_jam' => $jam[$i],
                 'status' => 'diajukan'
+            );
+            $n += $this->kls_pengganti->update($data);
+        }
+        $this->response($n . ' data diupdate');
+    }
+
+    // KPS menyetujui kelas pengganti
+    function verif_put()
+    {
+        $jml_jam = intval($this->put('jml_jam'));
+        $kode = intval($this->put('kd_gantikls'));
+        $n = 0;
+
+        for ($i=0; $i < $jml_jam; $i++) { 
+            # code...
+            $data = array(
+                'kd_gantikls' => $kode + $i,
+                'status' => 'disetujui'
             );
             $n += $this->kls_pengganti->update($data);
         }
