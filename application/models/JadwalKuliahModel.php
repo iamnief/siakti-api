@@ -57,7 +57,8 @@ Class JadwalKuliahModel extends CI_Model{
 	}
 
 	public function getJadwalForAbsen2($thn_akad_id, $namaruang, $hari, $kodeklas, $kodemk){
-		$this->db->select('min(jk.kodejdwl) as kodejdwl, jk.kelas_kodeklas, kls.namaklas, mk.namamk');
+		$this->db->select('min(jk.kodejdwl) as kodejdwl, count(jk.kodejdwl) as jml_jam, 
+		jk.kelas_kodeklas, kls.namaklas, mk.namamk');
 		$this->db->from('tik.jadwal_kul as jk');
 		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
 		$this->db->join('tik.matakuliah as mk', 'jk.matakuliah_kodemk = mk.kodemk');

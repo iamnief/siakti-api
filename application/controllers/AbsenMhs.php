@@ -16,6 +16,7 @@ class AbsenMhs extends REST_Controller
         $this->load->model('MahasiswaModel', 'mahasiswa');
         $this->load->model('AbsensiModel', 'absensi');
         $this->load->model('JadwalKuliahModel', 'jadwal');
+        $this->load->model('KompensasiModel', 'kompensasi');
         $this->load->model('KelasPenggantiModel', 'kelaspengganti');
         $this->load->model('TahunAkadModel', 'thn_akad');
     }
@@ -105,6 +106,7 @@ class AbsenMhs extends REST_Controller
     {
         $kodeklas = $this->post('kodeklas');
         $data_absensi = null;
+        $jml_jam = intval($this->post('jml_jam'));
         if ($this->post('tipe_kelas') == 'normal') {
             $data_absensi = array(
                 'jadwal_kul_kodejdwl' => $this->post('kode'),
@@ -122,18 +124,23 @@ class AbsenMhs extends REST_Controller
 
         $mahasiswa = $this->mahasiswa->getMahasiswaByKelas($kodeklas);
         $n = 0;
+        $kompen = null;
 
         foreach ($mahasiswa as $key => $value) {
             $absen = array(
                 'absensi_kd_absendsn' => $absensi_kd_absendsn,
                 'mahasiswa_nim' => $value['nim'],
-                'status' => 'Alpha'
+                'status' => 'Alpha',
+                'telat' => 50 * $jml_jam
             );
             $n += $this->absen_mhs->insert($absen);
+
+            $kompen = $this->kompensasi->updateKompenAbsen($value['nim'], date('d-m-Y'));
         }
 
         $this->response([
-            'jml_mhs' => $n
+            'jml_mhs' => $n,
+            'kompen' => $kompen
         ]);
     }
 
@@ -241,7 +248,7 @@ class AbsenMhs extends REST_Controller
                         if ($waktu > $absensi[0]['jam_msk']){
                             $sekarang = new DateTime($tgl . ' ' . $waktu);
                             $selisih = $sekarang->diff(new DateTime($tgl . ' ' . $absensi[0]['jam_msk']));
-                            $telat += $selisih;
+                            $telat += $selisih->i;
                         }
                         $update_absen = array(
                             'jam_masuk' => $waktu,
@@ -252,6 +259,8 @@ class AbsenMhs extends REST_Controller
                         );
 
                         $update = $this->absen_mhs->update($update_absen);
+
+                        $kompen = $this->kompensasi->updateKompenAbsen($nim, date('d-m-Y'));
 
                         if ($update <= 0) { // Jika Gagal Absen
 
@@ -287,6 +296,9 @@ class AbsenMhs extends REST_Controller
                     } else if ($absen_mhs[0]['jam_keluar'] == null) { // Jika mahasiswa belum absen keluar
 
                         $telat = intval($absen_mhs[0]['telat']) - 50;
+                        if ($telat > 100) {
+                            $telat = $kf[0]['jml_jam'] * 50;
+                        }
                         $update_absen = array(
                             'jam_keluar' => $waktu,
                             'status' => 'Hadir',
@@ -296,6 +308,8 @@ class AbsenMhs extends REST_Controller
                         );
 
                         $update = $this->absen_mhs->update($update_absen);
+
+                        $kompen = $this->kompensasi->updateKompenAbsen($nim, date('d-m-Y'));
 
                         if ($update <= 0) { // Jika Gagal Absen
 
@@ -323,6 +337,7 @@ class AbsenMhs extends REST_Controller
                 }
             }
         }
+        $response['kelas_fix'] = $kf;
         $this->response($response);
     }
 }
