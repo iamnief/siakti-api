@@ -132,7 +132,8 @@ class KelasPenggantiModel extends CI_Model
 
 	public function getKelasPenggantiForAbsen2($thn_akad_id, $namaruang, $tgl, $kodeklas, $kodemk)
 	{
-		$this->db->select('min(kp.kd_gantikls) as kd_gantikls, jk.kelas_kodeklas, kls.namaklas, mk.namamk');
+		$this->db->select('min(kp.kd_gantikls) as kd_gantikls, count(kp.kd_gantikls) as jml_jam, 
+		jk.kelas_kodeklas, kls.namaklas, mk.namamk');
 		$this->db->from('tik.kls_pengganti as kp');
 		$this->db->join('tik.jadwal_kul as jk', 'kp.jadwal_kul_kodejdwl = jk.kodejdwl');
 		$this->db->join('tik.kelas as kls', 'jk.kelas_kodeklas = kls.kodeklas');
